@@ -4,6 +4,8 @@ FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.12
 ARG BUILD_DATE
 ARG VERSION
 ARG DISKOVER_VERSION
+ARG ES_HOST=elasticsearch
+
 #LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
 #LABEL maintainer="alex-phillips"
 
@@ -21,6 +23,7 @@ RUN echo "**** install build packages ****" && \
 	php7-curl \
 	php7-phar \
 	py3-pip \
+  nano \
 	python3 && \
  echo "**** install diskover ****" && \
  mkdir -p /app/diskover && \
@@ -54,7 +57,17 @@ RUN echo "**** install build packages ****" && \
  pip3 install rq-dashboard && \
  echo "**** install composer packages ****" && \
  cd /app/diskover-web && \
- composer install && \
+ cp composer.json /var/www && \
+ cp -r /app/diskover-web/public/ /var/www/html/ && \
+ cp -r /app/diskover-web/src /var/www/src && \
+cp /var/www/src/diskover/Constants.php.sample /var/www/src/diskover/Constants.php && \
+cp /var/www/html/smartsearches.txt.sample /var/www/html/smartsearches.txt && \
+cp /var/www/html/customtags.txt.sample /var/www/html/customtags.txt && \
+cp /var/www/html/extrafields.txt.sample /var/www/html/extrafields.txt && \
+cd /var/www && \
+composer install && \
+sed -i "s!const ES_HOST = 'localhost';!const ES_HOST = '$ES_HOST';!g" /var/www/src/diskover/Constants.php && \
+ln -s /var/www/html/dashboard.php /var/www/html/index.php && \
  echo "**** fix logrotate ****" && \
  sed -i "s#/var/log/messages {}.*# #g" /etc/logrotate.conf && \
  echo "**** symlink python3 ****" && \
