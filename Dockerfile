@@ -4,12 +4,11 @@ FROM ghcr.io/linuxserver/baseimage-alpine-nginx:3.12
 ARG BUILD_DATE
 ARG VERSION
 ARG DISKOVER_VERSION
-LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-LABEL maintainer="alex-phillips"
+#LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
+#LABEL maintainer="alex-phillips"
 
-RUN \
- echo "**** install build packages ****" && \
- apk add --no-cache --virtual=build-dependencies \
+RUN echo "**** install build packages ****" && \
+ apk add --no-cache --force-non-repository --virtual=build-dependencies \
 	composer \
 	curl \
 	gcc \
