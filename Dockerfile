@@ -40,7 +40,7 @@ RUN \
  DISKOVER_WEB_VERSION=$(curl -sX GET "https://api.github.com/repos/AquaBearCo/diskover-web/releases/latest" \
 	| awk '/tag_name/{print $4;exit}' FS='[""]'); \
  if [ "${DISKOVER_VERSION}" !=  "${DISKOVER_WEB_VERSION}" ] || [ -z ${DISKOVER_VERSION+x} ]; then \
-	DISKOVER_VERSION=$(curl -sX GET "https://api.github.com/repos/alex-phillips/diskover-web/releases/latest" \
+	DISKOVER_VERSION=$(curl -sX GET "https://api.github.com/repos/AquaBearCo/diskover-web/releases/latest" \
 	| awk '/tag_name/{print $4;exit}' FS='[""]'); \
  fi && \
  curl -o \
