@@ -58,6 +58,7 @@ RUN echo "**** install build packages ****" && \
  pip3 install rq-dashboard && \
  echo "**** install composer packages ****" && \
  cd /app/diskover-web && \
+  mkdir -p /var/www/diskover-web && \
  cp composer.json /var/www/diskover-web/ && \
  cp -r /app/diskover-web/public/ /var/www/diskover-web/public/ && \
  cp -r /app/diskover-web/src /var/www/diskover-web/src && \
