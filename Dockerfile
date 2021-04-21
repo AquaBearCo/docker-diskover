@@ -61,10 +61,17 @@ RUN echo "**** install build packages ****" && \
  cp composer.json /var/www && \
  cp -r /app/diskover-web/public/ /var/www/html/ && \
  cp -r /app/diskover-web/src /var/www/src && \
+ cp /app/diskover-web/config/diskover-web.conf /etc/nginx/conf.d/diskover-web.conf && \
+sed -i 's/abc/nginx/g' /etc/php7/php-fpm.d/www.conf && \
+sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/php7/php-fpm.d/www.conf && \
+sed -i 's/;listen.group = nginx/listen.group = nginx/g' /etc/php7/php-fpm.d/www.conf && \
 cp /var/www/src/diskover/Constants.php.sample /var/www/src/diskover/Constants.php && \
 cp /var/www/html/smartsearches.txt.sample /var/www/html/smartsearches.txt && \
 cp /var/www/html/customtags.txt.sample /var/www/html/customtags.txt && \
 cp /var/www/html/extrafields.txt.sample /var/www/html/extrafields.txt && \
+cd /var/www/html && \
+chmod 660 *.txt && \
+chown -R nginx:nginx /var/www/ && \
 cd /var/www && \
 composer install && \
 sed -i "s!const ES_HOST = 'localhost';!const ES_HOST = '$ES_HOST';!g" /var/www/src/diskover/Constants.php && \
@@ -84,5 +91,5 @@ ln -s /var/www/html/dashboard.php /var/www/html/index.php && \
 COPY root/ /
 
 # ports and volumes
-EXPOSE 8000
+EXPOSE 80
 VOLUME /config
