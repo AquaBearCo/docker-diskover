@@ -24,6 +24,7 @@ RUN echo "**** install build packages ****" && \
 	php7-phar \
 	py3-pip \
   nano \
+  php7 php7-common php7-fpm php7-opcache php7-pecl-mcrypt php7-cli php7-gd php7-mysqlnd php7-ldap php7-zip php7-xml php-xmlrpc php7-mbstring php7-json \
 	python3 && \
  echo "**** install diskover ****" && \
  mkdir -p /app/diskover && \
