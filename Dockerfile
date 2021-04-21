@@ -7,7 +7,7 @@ ARG DISKOVER_VERSION
 ARG ES_HOST=elasticsearch
 
 #LABEL build_version="Linuxserver.io version:- ${VERSION} Build-date:- ${BUILD_DATE}"
-#LABEL maintainer="alex-phillips"
+#LABEL maintainer="AquaBearCo"
 
 RUN echo "**** install build packages ****" && \
  apk add --no-cache --force-non-repository --virtual=build-dependencies \
@@ -58,24 +58,24 @@ RUN echo "**** install build packages ****" && \
  pip3 install rq-dashboard && \
  echo "**** install composer packages ****" && \
  cd /app/diskover-web && \
- cp composer.json /var/www && \
- cp -r /app/diskover-web/public/ /var/www/html/ && \
- cp -r /app/diskover-web/src /var/www/src && \
+ cp composer.json /var/www/diskover-web/ && \
+ cp -r /app/diskover-web/public/ /var/www/diskover-web/public/ && \
+ cp -r /app/diskover-web/src /var/www/diskover-web/src && \
  cp /app/diskover-web/config/diskover-web.conf /etc/nginx/conf.d/diskover-web.conf && \
 sed -i 's/abc/nginx/g' /etc/php7/php-fpm.d/www.conf && \
 sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/php7/php-fpm.d/www.conf && \
 sed -i 's/;listen.group = nginx/listen.group = nginx/g' /etc/php7/php-fpm.d/www.conf && \
-cp /var/www/src/diskover/Constants.php.sample /var/www/src/diskover/Constants.php && \
-cp /var/www/html/smartsearches.txt.sample /var/www/html/smartsearches.txt && \
-cp /var/www/html/customtags.txt.sample /var/www/html/customtags.txt && \
-cp /var/www/html/extrafields.txt.sample /var/www/html/extrafields.txt && \
-cd /var/www/html && \
+cp /var/www/diskover-web/src/diskover/Constants.php.sample /var/www/diskover-web/src/diskover/Constants.php && \
+cp /var/www/diskover-web/public/smartsearches.txt.sample /var/www/diskover-web/public/smartsearches.txt && \
+cp /var/www/diskover-web/public/customtags.txt.sample /var/www/diskover-web/public/customtags.txt && \
+cp /var/www/diskover-web/public/extrafields.txt.sample /var/www/diskover-web/public/extrafields.txt && \
+cd /var/www/diskover-web/public && \
 chmod 660 *.txt && \
-chown -R nginx:nginx /var/www/ && \
-cd /var/www && \
+chown -R nginx:nginx /var/www/diskover-web/ && \
+cd /var/www/diskover-web/ && \
 composer install && \
-sed -i "s!const ES_HOST = 'localhost';!const ES_HOST = '$ES_HOST';!g" /var/www/src/diskover/Constants.php && \
-ln -s /var/www/html/dashboard.php /var/www/html/index.php && \
+sed -i "s!const ES_HOST = 'localhost';!const ES_HOST = '$ES_HOST';!g" /var/www/diskover-web/src/diskover/Constants.php && \
+ln -s /var/www/diskover-web/public/dashboard.php /var/www/diskover-web/public/index.php && \
  echo "**** fix logrotate ****" && \
  sed -i "s#/var/log/messages {}.*# #g" /etc/logrotate.conf && \
  echo "**** symlink python3 ****" && \
