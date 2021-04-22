@@ -24,6 +24,7 @@ RUN echo "**** install build packages ****" && \
 	php7-phar \
 	py3-pip \
   nano \
+  curl\
   php7 php7-common php7-fpm php7-opcache php7-pecl-mcrypt php7-cli php7-gd php7-mysqlnd php7-ldap php7-zip php7-xml php-xmlrpc php7-mbstring php7-json \
 	python3 && \
  echo "**** install diskover ****" && \
@@ -58,25 +59,25 @@ RUN echo "**** install build packages ****" && \
  pip3 install rq-dashboard && \
  echo "**** install composer packages ****" && \
  cd /app/diskover-web && \
-  mkdir -p /var/www/diskover-web && \
- cp composer.json /var/www/diskover-web/ && \
- cp -r /app/diskover-web/public/ /var/www/diskover-web/public/ && \
- cp -r /app/diskover-web/src /var/www/diskover-web/src && \
- cp /app/diskover-web/config/diskover-web.conf /etc/nginx/conf.d/diskover-web.conf && \
-sed -i 's/abc/nginx/g' /etc/php7/php-fpm.d/www.conf && \
-sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/php7/php-fpm.d/www.conf && \
-sed -i 's/;listen.group = nginx/listen.group = nginx/g' /etc/php7/php-fpm.d/www.conf && \
-cp /var/www/diskover-web/src/diskover/Constants.php.sample /var/www/diskover-web/src/diskover/Constants.php && \
-cp /var/www/diskover-web/public/smartsearches.txt.sample /var/www/diskover-web/public/smartsearches.txt && \
-cp /var/www/diskover-web/public/customtags.txt.sample /var/www/diskover-web/public/customtags.txt && \
-cp /var/www/diskover-web/public/extrafields.txt.sample /var/www/diskover-web/public/extrafields.txt && \
-cd /var/www/diskover-web/public && \
-chmod 660 *.txt && \
-chown -R nginx:nginx /var/www/diskover-web/ && \
-cd /var/www/diskover-web/ && \
+#  mkdir -p /var/www/diskover-web && \
+# cp composer.json /var/www/diskover-web/ && \
+# cp -r /app/diskover-web/public/ /var/www/diskover-web/public/ && \
+# cp -r /app/diskover-web/src /var/www/diskover-web/src && \
+# cp /app/diskover-web/config/diskover-web.conf /etc/nginx/conf.d/diskover-web.conf && \
+#sed -i 's/abc/nginx/g' /etc/php7/php-fpm.d/www.conf && \
+#sed -i 's/;listen.owner = nobody/listen.owner = nginx/g' /etc/php7/php-fpm.d/www.conf && \
+#sed -i 's/;listen.group = nginx/listen.group = nginx/g' /etc/php7/php-fpm.d/www.conf && \
+#cp /var/www/diskover-web/src/diskover/Constants.php.sample /var/www/diskover-web/src/diskover/Constants.php && \
+#cp /var/www/diskover-web/public/smartsearches.txt.sample /var/www/diskover-web/public/smartsearches.txt && \
+#cp /var/www/diskover-web/public/customtags.txt.sample /var/www/diskover-web/public/customtags.txt && \
+#cp /var/www/diskover-web/public/extrafields.txt.sample /var/www/diskover-web/public/extrafields.txt && \
+#cd /var/www/diskover-web/public && \
+#chmod 660 *.txt && \
+#chown -R nginx:nginx /var/www/diskover-web/ && \
+#cd /var/www/diskover-web/ && \
 composer install && \
-sed -i "s!const ES_HOST = 'localhost';!const ES_HOST = '$ES_HOST';!g" /var/www/diskover-web/src/diskover/Constants.php && \
-ln -s /var/www/diskover-web/public/dashboard.php /var/www/diskover-web/public/index.php && \
+#vsed -i "s!const ES_HOST = 'localhost';!const ES_HOST = '$ES_HOST';!g" /var/www/diskover-web/src/diskover/Constants.php && \
+# ln -s /var/www/diskover-web/public/dashboard.php /var/www/diskover-web/public/index.php && \
  echo "**** fix logrotate ****" && \
  sed -i "s#/var/log/messages {}.*# #g" /etc/logrotate.conf && \
  echo "**** symlink python3 ****" && \
